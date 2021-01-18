@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AssemblyScript RayTracer</title>
+  </head>
+  <body>
+    <canvas id="c" width="300" height="150"></canvas>
+  </body>
+  <script>
+    (async () => {
+      const wasm = await fetch("build/optimized.wasm").then((r) =>
+        r.arrayBuffer()
+      );
+      const module = await WebAssembly.instantiate(wasm, { Math });
+      const { getImageData } = module.instance.exports;
+      const imageData = getImageData();
+      document.getElementById("c").putImageData(imageData, 0, 0);
+    })();
+  </script>
+</html>
